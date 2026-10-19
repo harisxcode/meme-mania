@@ -1,0 +1,6 @@
+{
+  "name": "Meme Mania",
+  "description": "An action-packed 3D Temple Run style endless runner packed with viral meme characters, wild power-ups, meme sound effects, and full GitHub repository documentation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
