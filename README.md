@@ -122,7 +122,7 @@ To host this repository on your GitHub account under the name `meme-mania`:
 # 1. Initialize git (if not already initialized)
 git init
 
-# 2. Stage and commit all files
+# 2. Stage and commit all files (including package-lock.json)
 git add .
 git commit -m "feat: initial commit for Meme Mania endless runner"
 
@@ -134,6 +134,18 @@ git remote add origin https://github.com/YOUR_USERNAME/meme-mania.git
 git push -u origin main
 ```
 
+### 🌐 Deploying to GitHub Pages
+
+This repository includes automated GitHub Actions deployment workflows configured for GitHub Pages!
+
+1. Go to your repository on GitHub.
+2. Click **Settings** > **Pages** (in the left sidebar).
+3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
+4. That's it! Every push to `main` will automatically build and publish your game to:
+   ```
+   https://<YOUR_USERNAME>.github.io/meme-mania/
+   ```
+
 ---
 
 ## 🏗️ Architecture & Project Structure
@@ -142,7 +154,8 @@ git push -u origin main
 meme-mania/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # Automated CI test & build workflow
+│       ├── ci.yml               # Automated CI test & build workflow
+│       └── deploy.yml           # Automated GitHub Pages deployment workflow
 ├── src/
 │   ├── audio/
 │   │   └── soundManager.ts      # Web Audio procedural sound synth & BGM

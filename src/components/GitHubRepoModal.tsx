@@ -296,10 +296,21 @@ export const GitHubRepoModal: React.FC<GitHubRepoModalProps> = ({ onClose }) => 
 
                   <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
                     <span className="text-xs font-bold text-emerald-400 block mb-1">
-                      Step 4: Continuous Integration & Deployment (CI/CD)
+                      Step 4: Enable GitHub Pages in Repo Settings
                     </span>
                     <p className="text-xs text-slate-300">
-                      The repo includes <code>.github/workflows/ci.yml</code> configured for automatic building with Vite and TypeScript checks on every push!
+                      Go to your GitHub repo <strong>Settings</strong> &gt; <strong>Pages</strong>, and under <em>Build and deployment / Source</em>, choose <strong>GitHub Actions</strong>.
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                    <span className="text-xs font-bold text-emerald-400 block mb-1">
+                      Step 5: Automated Build & Deploy (Live Game!)
+                    </span>
+                    <p className="text-xs text-slate-300">
+                      The repo includes <code>.github/workflows/deploy.yml</code> and <code>package-lock.json</code>. Your game will automatically build and publish to:
+                      <br />
+                      <code className="text-emerald-400 font-bold">https://&lt;your-username&gt;.github.io/meme-mania/</code>
                     </p>
                   </div>
                 </div>
@@ -315,7 +326,10 @@ export const GitHubRepoModal: React.FC<GitHubRepoModalProps> = ({ onClose }) => 
                 </h3>
                 <div className="bg-black/70 p-3 rounded-xl font-mono text-xs text-slate-300 space-y-1">
                   <div className="text-emerald-400">meme-mania/</div>
-                  <div>├── .github/workflows/ci.yml  <span className="text-slate-500"># GitHub Actions CI pipeline</span></div>
+                  <div>├── .github/workflows/</div>
+                  <div>│   ├── ci.yml              <span className="text-slate-500"># GitHub Actions CI build check</span></div>
+                  <div>│   └── deploy.yml          <span className="text-slate-500"># Automated GitHub Pages deployment</span></div>
+                  <div>├── package-lock.json       <span className="text-slate-500"># Fixed npm dependencies lockfile</span></div>
                   <div>├── src/</div>
                   <div>│   ├── audio/</div>
                   <div>│   │   └── soundManager.ts     <span className="text-slate-500"># Procedural Web Audio synth & BGM</span></div>
