@@ -55,6 +55,10 @@ Sprint down the neon synthwave cyber highway, dodge **404 Firewalls**, leap over
   - Iconic sound effects generated in real-time (Vine Boom sub-bass drop, Bruh vocal formant synth, Doge Wow twinkles, coin chimes, jump boings, slide whooshes, and Game Over trumpet).
   - Dynamic procedural synthwave runner soundtrack that accelerates with speed boosts!
   - Zero external MP3/WAV dependencies — no missing files, no 404s.
+- **🏆 Top 10 All-Time Leaderboard System**:
+  - Persistent Hall of Fame tracking the top 10 highest scores of all time in `localStorage`.
+  - Records player name, score, distance, character avatar, and date.
+  - Interactive player tag customization and instant Top 10 qualification alerts upon game over.
 - **🎁 7-Day Daily Login Bonus**:
   - Rewarding daily login system tracking consecutive check-in streaks via `localStorage`. Earn escalating Dogecoin rewards from Day 1 (50 Ð) all the way to the Day 7 jackpot (500 Ð)!
 - **🛍️ Meme Locker & Upgrade Economy**:

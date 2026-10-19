@@ -12,7 +12,8 @@ import {
   Sparkles,
   Zap,
   Lock,
-  Gift
+  Gift,
+  Trophy
 } from 'lucide-react';
 
 interface StartMenuProps {
@@ -22,6 +23,7 @@ interface StartMenuProps {
   onStartGame: () => void;
   onOpenShop: () => void;
   onOpenQuests: () => void;
+  onOpenLeaderboard: () => void;
   onOpenGithubDocs: () => void;
   onOpenDailyBonus: () => void;
   canClaimDailyBonus: boolean;
@@ -38,6 +40,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
   onStartGame,
   onOpenShop,
   onOpenQuests,
+  onOpenLeaderboard,
   onOpenGithubDocs,
   onOpenDailyBonus,
   canClaimDailyBonus,
@@ -63,16 +66,23 @@ export const StartMenu: React.FC<StartMenuProps> = ({
     <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 sm:p-8 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/95 pointer-events-auto select-none backdrop-blur-[2px]">
       {/* Top Header Bar */}
       <div className="flex items-center justify-between w-full max-w-5xl mx-auto">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl sm:text-3xl">🔥</span>
+        <div 
+          onClick={onOpenLeaderboard}
+          className="flex items-center gap-2 cursor-pointer group bg-slate-900/60 hover:bg-slate-900/90 border border-transparent hover:border-yellow-500/40 px-3 py-1.5 rounded-2xl transition-all"
+          title="View Top 10 Leaderboard"
+        >
+          <span className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform">🏆</span>
           <div>
-            <h2 className="text-xs font-black tracking-widest text-pink-400 uppercase">
-              Temple Runner 3D
+            <h2 className="text-xs font-black tracking-widest text-pink-400 uppercase flex items-center gap-1">
+              <span>Temple Runner 3D</span>
             </h2>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">High Score:</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-slate-400">High:</span>
               <span className="text-sm font-black text-cyan-400 font-mono">
                 {highScore.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-yellow-400/80 underline font-bold ml-1 hidden sm:inline">
+                Top 10
               </span>
             </div>
           </div>
@@ -225,10 +235,18 @@ export const StartMenu: React.FC<StartMenuProps> = ({
 
         <button
           onClick={onOpenQuests}
-          className="flex-1 min-w-[130px] py-2.5 px-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/30 hover:border-cyan-400 text-cyan-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md"
+          className="flex-1 min-w-[110px] py-2.5 px-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/30 hover:border-cyan-400 text-cyan-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md"
         >
           <Award className="w-4 h-4 text-cyan-400" />
           <span>Quests</span>
+        </button>
+
+        <button
+          onClick={onOpenLeaderboard}
+          className="flex-1 min-w-[110px] py-2.5 px-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-yellow-500/30 hover:border-yellow-400 text-yellow-300 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md"
+        >
+          <Trophy className="w-4 h-4 text-yellow-400" />
+          <span>Ranks</span>
         </button>
 
         <button

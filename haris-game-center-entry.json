@@ -1,0 +1,21 @@
+{
+  "id": "meme-mania",
+  "title": "Meme Mania",
+  "tagline": "The Ultimate 3D Meme Temple Runner",
+  "description": "An action-packed 3D endless runner packed with viral meme characters (Doge, Gigachad, Pepe, Popcat, Wojak, Capybara), wild power-ups, procedural meme sound effects, and 100% 60FPS Three.js kinematics.",
+  "category": "Action / 3D Arcade Runner",
+  "genre": "Endless Runner",
+  "engine": "Three.js + React 19",
+  "tags": ["3D", "Runner", "Temple Run", "Memes", "Arcade", "Web Audio", "Vite"],
+  "playUrl": "https://harisxcode.github.io/meme-mania/",
+  "repositoryUrl": "https://github.com/harisxcode/meme-mania",
+  "thumbnail": "https://harisxcode.github.io/meme-mania/preview.png",
+  "badge": "NEW",
+  "featured": true,
+  "controls": {
+    "desktop": "WASD / Arrow Keys to dodge, jump, and slide. Space to jump.",
+    "mobile": "On-screen steering pad & jump/slide buttons, or swipe gestures."
+  },
+  "rating": 5.0,
+  "developer": "Haris"
+}

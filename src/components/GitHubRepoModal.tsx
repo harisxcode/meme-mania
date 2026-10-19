@@ -11,7 +11,8 @@ import {
   Sparkles,
   GitBranch,
   ShieldAlert,
-  Zap
+  Zap,
+  Gamepad2
 } from 'lucide-react';
 
 interface GitHubRepoModalProps {
@@ -19,7 +20,7 @@ interface GitHubRepoModalProps {
 }
 
 export const GitHubRepoModal: React.FC<GitHubRepoModalProps> = ({ onClose }) => {
-  const [activeTab, setActiveTab] = useState<'docs' | 'setup' | 'architecture' | 'readme'>('docs');
+  const [activeTab, setActiveTab] = useState<'docs' | 'setup' | 'architecture' | 'gamecenter' | 'readme'>('gamecenter');
   const [copiedClone, setCopiedClone] = useState(false);
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
 
@@ -87,6 +88,7 @@ export const GitHubRepoModal: React.FC<GitHubRepoModalProps> = ({ onClose }) => 
         {/* Tab Navigation */}
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1 text-xs sm:text-sm">
           {[
+            { id: 'gamecenter', label: '🎮 Haris Game Center', icon: Gamepad2 },
             { id: 'docs', label: '📖 Game Docs & Lore', icon: BookOpen },
             { id: 'setup', label: '🚀 GitHub Setup', icon: Terminal },
             { id: 'architecture', label: '🏗️ Architecture', icon: Layers },
@@ -109,6 +111,117 @@ export const GitHubRepoModal: React.FC<GitHubRepoModalProps> = ({ onClose }) => 
 
         {/* Tab Body */}
         <div className="flex-1 overflow-y-auto pr-2 space-y-4 text-xs sm:text-sm text-slate-300">
+          {activeTab === 'gamecenter' && (
+            <div className="space-y-4">
+              <div className="bg-slate-950/80 border border-purple-500/40 rounded-2xl p-4 sm:p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Gamepad2 className="w-5 h-5 text-purple-400" />
+                  <h3 className="text-base font-black text-white">
+                    Add Meme Mania to Haris Game Center
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                  To feature <strong>Meme Mania</strong> in your central <strong>Haris Game Center</strong> repository, copy the snippets below directly into your game center repository.
+                </p>
+
+                <div className="bg-slate-900/90 rounded-xl p-3 border border-slate-800 text-xs text-slate-300 space-y-2">
+                  <div className="flex justify-between items-center text-slate-400 text-[11px]">
+                    <span>Published GitHub Pages Game URL:</span>
+                    <button
+                      onClick={() => handleCopy('https://harisxcode.github.io/meme-mania/', 'url')}
+                      className="text-emerald-400 hover:underline flex items-center gap-1 font-mono"
+                    >
+                      {copiedCommand === 'url' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedCommand === 'url' ? 'Copied' : 'Copy URL'}</span>
+                    </button>
+                  </div>
+                  <div className="font-mono text-emerald-300 font-bold bg-black/60 p-2 rounded-lg break-all">
+                    https://harisxcode.github.io/meme-mania/
+                  </div>
+                </div>
+              </div>
+
+              {/* Snippet 1: JSON Config for games.json */}
+              <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-black text-white text-xs sm:text-sm">
+                    1. JSON Entry (for games.json in Haris Game Center)
+                  </h4>
+                  <button
+                    onClick={() => handleCopy(`{\n  "id": "meme-mania",\n  "title": "Meme Mania",\n  "tagline": "The Ultimate 3D Meme Temple Runner",\n  "description": "An action-packed 3D endless runner packed with viral meme characters, wild power-ups, procedural meme sound effects, and 100% 60FPS Three.js kinematics.",\n  "category": "Action / 3D Arcade Runner",\n  "genre": "Endless Runner",\n  "engine": "Three.js + React 19",\n  "tags": ["3D", "Runner", "Temple Run", "Memes", "Arcade", "Web Audio", "Vite"],\n  "playUrl": "https://harisxcode.github.io/meme-mania/",\n  "repositoryUrl": "https://github.com/harisxcode/meme-mania",\n  "featured": true,\n  "rating": 5.0,\n  "developer": "Haris"\n}`, 'json')}
+                    className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold flex items-center gap-1 border border-slate-700"
+                  >
+                    {copiedCommand === 'json' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedCommand === 'json' ? 'COPIED!' : 'COPY JSON'}</span>
+                  </button>
+                </div>
+                <pre className="bg-black/70 p-3 rounded-xl font-mono text-[11px] text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "id": "meme-mania",
+  "title": "Meme Mania",
+  "tagline": "The Ultimate 3D Meme Temple Runner",
+  "description": "An action-packed 3D endless runner packed with viral meme characters, wild power-ups, procedural meme sound effects, and 100% 60FPS Three.js kinematics.",
+  "category": "Action / 3D Arcade Runner",
+  "genre": "Endless Runner",
+  "engine": "Three.js + React 19",
+  "tags": ["3D", "Runner", "Temple Run", "Memes", "Arcade", "Web Audio", "Vite"],
+  "playUrl": "https://harisxcode.github.io/meme-mania/",
+  "repositoryUrl": "https://github.com/harisxcode/meme-mania",
+  "featured": true,
+  "rating": 5.0,
+  "developer": "Haris"
+}`}
+                </pre>
+              </div>
+
+              {/* Snippet 2: Markdown Card for Haris Game Center README */}
+              <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-black text-white text-xs sm:text-sm">
+                    2. Markdown Card (for Haris Game Center README.md)
+                  </h4>
+                  <button
+                    onClick={() => handleCopy(`### 🏃‍♂️ Meme Mania - The Ultimate 3D Meme Temple Runner\n\n[![Play Meme Mania](https://img.shields.io/badge/PLAY_NOW-🎮_Meme_Mania-ff007f?style=for-the-badge)](https://harisxcode.github.io/meme-mania/)\n[![GitHub Repo](https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/harisxcode/meme-mania)\n\n- **Genre**: 3D Endless Runner (Temple Run Style)\n- **Engine**: Three.js (WebGL 60FPS) + React 19 + Tailwind CSS\n- **Features**: 6 Playable Memers (Doge, Gigachad, Pepe, Popcat, Wojak, Capybara), 6 Wild Power-Ups, Procedural Web Audio SFX, Leaderboard, and Daily Bonuses.\n- **Live URL**: https://harisxcode.github.io/meme-mania/`, 'md')}
+                    className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold flex items-center gap-1 border border-slate-700"
+                  >
+                    {copiedCommand === 'md' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedCommand === 'md' ? 'COPIED!' : 'COPY MARKDOWN'}</span>
+                  </button>
+                </div>
+                <pre className="bg-black/70 p-3 rounded-xl font-mono text-[11px] text-slate-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+{`### 🏃‍♂️ Meme Mania - The Ultimate 3D Meme Temple Runner
+
+[![Play Meme Mania](https://img.shields.io/badge/PLAY_NOW-🎮_Meme_Mania-ff007f?style=for-the-badge)](https://harisxcode.github.io/meme-mania/)
+[![GitHub Repo](https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/harisxcode/meme-mania)
+
+- **Genre**: 3D Endless Runner (Temple Run Style)
+- **Engine**: Three.js (WebGL 60FPS) + React 19 + Tailwind CSS
+- **Features**: 6 Playable Memers, 6 Wild Power-Ups, Procedural Audio, Top 10 Leaderboard, and Daily Bonus.
+- **Live URL**: https://harisxcode.github.io/meme-mania/`}
+                </pre>
+              </div>
+
+              {/* Snippet 3: Iframe Embed */}
+              <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-black text-white text-xs sm:text-sm">
+                    3. Iframe Embed (for embedding in Haris Game Center web pages)
+                  </h4>
+                  <button
+                    onClick={() => handleCopy(`<iframe src="https://harisxcode.github.io/meme-mania/" title="Meme Mania" width="100%" height="700" frameborder="0" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>`, 'iframe')}
+                    className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold flex items-center gap-1 border border-slate-700"
+                  >
+                    {copiedCommand === 'iframe' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedCommand === 'iframe' ? 'COPIED!' : 'COPY IFRAME'}</span>
+                  </button>
+                </div>
+                <code className="block bg-black/70 p-3 rounded-xl font-mono text-[11px] text-slate-300 overflow-x-auto break-all">
+                  &lt;iframe src=&quot;https://harisxcode.github.io/meme-mania/&quot; title=&quot;Meme Mania&quot; width=&quot;100%&quot; height=&quot;700&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; fullscreen; gamepad&quot; allowfullscreen&gt;&lt;/iframe&gt;
+                </code>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'docs' && (
             <div className="space-y-4">
               <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4">

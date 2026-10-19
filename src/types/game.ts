@@ -125,3 +125,16 @@ export interface DailyBonusState {
   canClaimToday: boolean;
 }
 
+export interface LeaderboardEntry {
+  id: string;
+  playerName: string;
+  score: number;
+  distance: number;
+  characterId: string;
+  characterEmoji: string;
+  characterName: string;
+  date: string;
+  isCurrentPlayer?: boolean;
+}
+
+

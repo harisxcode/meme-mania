@@ -9,6 +9,7 @@ import { QuestsModal } from './components/QuestsModal';
 import { GitHubRepoModal } from './components/GitHubRepoModal';
 import { PauseModal } from './components/PauseModal';
 import { DailyBonusModal } from './components/DailyBonusModal';
+import { LeaderboardModal } from './components/LeaderboardModal';
 import { soundManager } from './audio/soundManager';
 import { 
   ActivePowerUp, 
@@ -18,7 +19,8 @@ import {
   PowerUpConfig, 
   PowerUpType, 
   Quest,
-  DailyBonusState
+  DailyBonusState,
+  LeaderboardEntry
 } from './types/game';
 import { 
   INITIAL_CHARACTERS, 
@@ -26,6 +28,14 @@ import {
   INITIAL_QUESTS 
 } from './data/characters';
 import { getDailyBonusStatus, claimDailyReward } from './data/dailyBonus';
+import { 
+  loadLeaderboard, 
+  getStoredPlayerName, 
+  setStoredPlayerName, 
+  addScoreToLeaderboard, 
+  getRankForScore, 
+  resetLeaderboardToDefault 
+} from './data/leaderboard';
 
 export default function App() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -98,7 +108,14 @@ export default function App() {
   const [isQuestsOpen, setIsQuestsOpen] = useState(false);
   const [isGithubDocsOpen, setIsGithubDocsOpen] = useState(false);
   const [isDailyBonusOpen, setIsDailyBonusOpen] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+
+  // Leaderboard & Player Profile State
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() => loadLeaderboard());
+  const [playerName, setPlayerName] = useState<string>(() => getStoredPlayerName());
+  const [lastRunRank, setLastRunRank] = useState<number>(-1);
+  const [isSavedToLeaderboard, setIsSavedToLeaderboard] = useState(false);
 
   // Daily Login Bonus State
   const [dailyBonusStatus, setDailyBonusStatus] = useState<DailyBonusState>(() => getDailyBonusStatus());
@@ -122,6 +139,21 @@ export default function App() {
 
   const questsRef = useRef(quests);
   questsRef.current = quests;
+
+  const leaderboardRef = useRef(leaderboard);
+  leaderboardRef.current = leaderboard;
+
+  const playerNameRef = useRef(playerName);
+  playerNameRef.current = playerName;
+
+  const charactersRef = useRef(characters);
+  charactersRef.current = characters;
+
+  const selectedCharacterIdRef = useRef(selectedCharacterId);
+  selectedCharacterIdRef.current = selectedCharacterId;
+
+  const distanceRef = useRef(distance);
+  distanceRef.current = distance;
 
   // Save changes to localStorage
   useEffect(() => {
@@ -224,6 +256,26 @@ export default function App() {
           setIsNewHighScore(true);
         } else {
           setIsNewHighScore(false);
+        }
+
+        // Leaderboard Top 10 check
+        const rank = getRankForScore(finalScore, leaderboardRef.current);
+        setLastRunRank(rank);
+
+        if (rank > 0) {
+          const char = charactersRef.current.find((c) => c.id === selectedCharacterIdRef.current) || charactersRef.current[0];
+          const { updatedList } = addScoreToLeaderboard({
+            playerName: playerNameRef.current,
+            score: finalScore,
+            distance: Math.floor(distanceRef.current),
+            characterId: char.id,
+            characterEmoji: char.avatarEmoji,
+            characterName: char.name,
+          });
+          setLeaderboard(updatedList);
+          setIsSavedToLeaderboard(true);
+        } else {
+          setIsSavedToLeaderboard(false);
         }
 
         // Quests
@@ -441,6 +493,35 @@ export default function App() {
     updateQuestProgress('quest_coins_100', rewardCoins);
   };
 
+  const handleSaveToLeaderboard = (customName: string) => {
+    setStoredPlayerName(customName);
+    setPlayerName(customName);
+
+    const char = characters.find((c) => c.id === selectedCharacterId) || characters[0];
+    const { updatedList, rank } = addScoreToLeaderboard({
+      playerName: customName,
+      score: score,
+      distance: distance,
+      characterId: char.id,
+      characterEmoji: char.avatarEmoji,
+      characterName: char.name,
+    });
+    setLeaderboard(updatedList);
+    setLastRunRank(rank);
+    setIsSavedToLeaderboard(true);
+    addFloatingText('SAVED TO LEADERBOARD! 🏆', '#facc15');
+  };
+
+  const handleUpdatePlayerName = (newName: string) => {
+    setStoredPlayerName(newName);
+    setPlayerName(newName);
+  };
+
+  const handleResetLeaderboard = () => {
+    const defaultList = resetLeaderboardToDefault();
+    setLeaderboard(defaultList);
+  };
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-slate-950 font-sans">
       {/* 3D WebGL Canvas Container */}
@@ -481,6 +562,7 @@ export default function App() {
           onStartGame={handleStartGame}
           onOpenShop={() => setIsShopOpen(true)}
           onOpenQuests={() => setIsQuestsOpen(true)}
+          onOpenLeaderboard={() => setIsLeaderboardOpen(true)}
           onOpenGithubDocs={() => setIsGithubDocsOpen(true)}
           onOpenDailyBonus={() => setIsDailyBonusOpen(true)}
           canClaimDailyBonus={dailyBonusStatus.canClaimToday}
@@ -499,8 +581,13 @@ export default function App() {
           distance={distance}
           coins={coinsThisRun}
           isNewHighScore={isNewHighScore}
+          rank={lastRunRank}
+          playerName={playerName}
+          onSaveToLeaderboard={handleSaveToLeaderboard}
+          isSavedToLeaderboard={isSavedToLeaderboard}
           onRestart={handleRestart}
           onOpenShop={() => setIsShopOpen(true)}
+          onOpenLeaderboard={() => setIsLeaderboardOpen(true)}
           onOpenGithubDocs={() => setIsGithubDocsOpen(true)}
         />
       )}
@@ -537,6 +624,17 @@ export default function App() {
           quests={quests}
           onClaimQuest={handleClaimQuest}
           onClose={() => setIsQuestsOpen(false)}
+        />
+      )}
+
+      {/* Leaderboard Modal */}
+      {isLeaderboardOpen && (
+        <LeaderboardModal
+          entries={leaderboard}
+          playerName={playerName}
+          onUpdatePlayerName={handleUpdatePlayerName}
+          onResetLeaderboard={handleResetLeaderboard}
+          onClose={() => setIsLeaderboardOpen(false)}
         />
       )}
 
